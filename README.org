@@ -8,7 +8,7 @@ deleting so I know what is happening.
 
 This package is pretty efficient, I can hold down undo button and the highlight doesn’t slow down the operation.
 
-[[./undo-hl.mp4]]
+Watch [[https://youtu.be/enoGj4C5jzI][demo on YouTube]] or download [[./undo-hl.mp4][local copy of demo]].
 
 This is different from =highlight-changes-mode= in several regards. It highlights to-be-deleted text before deleting rather than after. Marking the deleted text after it’s deleted isn’t very helpful in my situation. It also has less functionalities than =highlight-changes-mode=, but I’m quite happy with the single function it now has.
 
