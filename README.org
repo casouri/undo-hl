@@ -1,0 +1,22 @@
+#+TITLE: Undo-hl
+
+Sometimes in a long undo chain where Emacs jumps to a far away
+position, I can’t tell whether the undo operation just moved to this
+position or it has also deleted some text. This package is meant to
+alleviate that confusion: it flashes the to-be-deleted text before
+deleting so I know what is happening.
+
+This package is pretty efficient, I can hold down undo button and the highlight doesn’t slow down the operation.
+
+[[./undo-hl.mp4]]
+
+This is different from =highlight-changes-mode= in several regards. It highlights to-be-deleted text before deleting rather than after. Marking the deleted text after it’s deleted isn’t very helpful in my situation. It also has less functionalities than =highlight-changes-mode=, but I’m quite happy with the single function it now has.
+
+* Usage
+
+Download the package and =M-x undo-hl-mode RET=. This is a local minor mode so you need to add to other mode’s hooks. I recommend only enabling this for text-editing modes.
+
+* Customization
+- Face: =undo-hl-delete=
+- Face: =undo-hl-insert=
+- Option: =undo-hl-undo-commands=. Undo-hl only runs before and after undo commands, if you use non-default undo commands, add them to this list.
