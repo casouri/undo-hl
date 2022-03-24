@@ -79,7 +79,7 @@ for BEG and END."
 (define-minor-mode undo-hl-mode
   "Highlight undo. Note that this is a local minor mode.
 I recommend only enabling this for text-editing modes."
-  :lighter "UH "
+  :lighter " UH"
   :group 'undo
   (if undo-hl-mode
       (progn
