@@ -20,3 +20,4 @@ Download the package and =M-x undo-hl-mode RET=. This is a local minor mode so y
 - Face: =undo-hl-delete=
 - Face: =undo-hl-insert=
 - Option: =undo-hl-undo-commands=. Undo-hl only runs before and after undo commands, if you use non-default undo commands, add them to this list.
+- Option: =undo-hl-flash-duration=. "Undo-hl flashes the to-be-deleted text for this number of seconds. Note that insertion highlight is not affected by this option: the highlight is removed when next command is called, not after a timer.

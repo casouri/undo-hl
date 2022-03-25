@@ -56,6 +56,12 @@
 Undo-hl only run before and after undo commands."
   :type '(list function))
 
+(defcustom undo-hl-flash-duration 0.02
+  "Undo-hl flashes the to-be-deleted text for this number of seconds.
+Note that insertion highlight is not affected by this option: the
+highlight is removed when next command is called, not after a timer."
+  :type 'number)
+
 (defvar-local undo-hl--overlay nil
   "The overlay used for highlighting inserted region.")
 
@@ -96,7 +102,7 @@ for BEG and END."
       (setq undo-hl--overlay (make-overlay beg end)))
     (overlay-put undo-hl--overlay 'face 'undo-hl-delete)
     ;; Sit-for automatically redisplays.
-    (sit-for 0.1)))
+    (sit-for undo-hl-flash-duration)))
 
 (defun undo-hl--cleanup-and-restart ()
   "Clean up highlight and allow change hooks to run."
