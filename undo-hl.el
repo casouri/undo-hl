@@ -41,6 +41,8 @@
 ;; our hook in the very front of the ‘after/before-change-functions’,
 ;; just to be save.
 
+(require 'pulse)
+
 (defgroup undo-hl nil
   "Custom group for undo-hl."
   :group 'undo)
@@ -58,8 +60,7 @@ Undo-hl only run before and after undo commands."
 
 (defcustom undo-hl-flash-duration 0.02
   "Undo-hl flashes the to-be-deleted text for this number of seconds.
-Note that insertion highlight is not affected by this option: the
-highlight is removed when next command is called, not after a timer."
+Note that insertion highlight is not affected by this option."
   :type 'number)
 
 (defvar-local undo-hl--overlay nil
@@ -82,7 +83,8 @@ for BEG, END and LEN."
     (if undo-hl--overlay
         (move-overlay undo-hl--overlay beg end)
       (setq undo-hl--overlay (make-overlay beg end)))
-    (overlay-put undo-hl--overlay 'face 'undo-hl-insert)))
+    (overlay-put undo-hl--overlay 'face 'default)
+    (pulse-momentary-highlight-overlay undo-hl--overlay 'undo-hl-insert)))
 
 (defun undo-hl--before-change (beg end)
   "Highlight the to-be-deleted region before an undo.
