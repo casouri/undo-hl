@@ -53,7 +53,7 @@
 (defface undo-hl-insert '((t . (:inherit diff-refine-added)))
   "Face used for highlighting the inserted text.")
 
-(defcustom undo-hl-undo-commands '(undo undo-only undo-redo undo-fu-only-undo undo-fu-only-redo)
+(defcustom undo-hl-undo-commands '(undo undo-only undo-redo undo-fu-only-undo undo-fu-only-redo evil-undo evil-redo)
   "Commands in this list are considered undo commands.
 Undo-hl only run before and after undo commands."
   :type '(list function))
