@@ -28,18 +28,19 @@
 ;;
 ;; Some package, like aggressive-indent, modifies the buffer when the
 ;; user makes modifications (in ‘post-command-hook’, timer, etc).
-;; Their modification invokes ‘before/after-change-functions’ just
-;; like a user modification. Naturally we don’t want to highlight
-;; those automatic modifications made not by the user. How do we do
-;; that? Essentially we generate a ticket for each command loop
+;; Their modification invokes ‘before-change-functions’ just like a
+;; user modification. Naturally we don’t want to highlight those
+;; automatic modifications made not by the user. How do we do that?
+;; Essentially we generate a ticket for each command loop
 ;; (‘undo-hl--hook-can-run’). One user modification = one command loop
 ;; = one ticket = one highlight. Whoever runs first gets to use that
 ;; ticket, and all other subsequent invocation of
-;; `undo-hl--before/after-change’ must not do anything. Note we have
-;; only one ticket for both before and after change, not one for each.
-;; Because of this “whoever comes first” policy, we need to install
-;; our hook in the very front of the ‘after/before-change-functions’,
-;; just to be save.
+;; `undo-hl--before-change’ must not do anything. We only constraint
+;; the before hooks, ie, deletion highlight because deletion highlight
+;; is blocking, while insertion highlight is not. Consecutive
+;; insertion highlight only shows the last one, but consecutive
+;; deletion highlight will show every highlight for
+;; ‘undo-hl-flash-duration’ and can be very annoying.
 
 (require 'pulse)
 
@@ -91,13 +92,16 @@ changes that often obstruct the real edit. Keep it at least 2."
 This is to be called from ‘after-change-functions’, see its doc
 for BEG, END and LEN."
   (when (and (memq this-command undo-hl-undo-commands)
-             undo-hl--hook-can-run
              (eq len 0)
              (>= (- end beg) undo-hl-mininum-edit-size))
-    ;; Prevent subsequent change hooks activated in this command loop
-    ;; from running.
-    (setq undo-hl--hook-can-run nil)
-    ;; Flash the inserted region with insert face.
+    ;; Flash the inserted region with insert face. There could be
+    ;; multiple changes made by a single undo. We effectively
+    ;; highlight only the last one. This is seems to work in practice.
+    ;; Eg, indent added by aggresive-indent precedes actual edit in
+    ;; the undo history, which means the actual edit wins and is
+    ;; highlighted, which is what we want. This should be true for
+    ;; other packages too, since they almost always do their edit
+    ;; AFTER user’s edit.
     (if undo-hl--overlay
         (move-overlay undo-hl--overlay beg end)
       (setq undo-hl--overlay (make-overlay beg end)))
