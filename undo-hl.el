@@ -63,6 +63,23 @@ Undo-hl only run before and after undo commands."
 Note that insertion highlight is not affected by this option."
   :type 'number)
 
+(defcustom undo-hl-mininum-edit-size 2
+  "Modifications smaller than this size is ignored.
+This is a useful heuristic that avoids small text property
+changes that often obstruct the real edit. Keep it at least 2."
+  ;; How does text property change obstruct highlighting the real
+  ;; edit: First, we only highlight one change every command loop;
+  ;; second, a single undo could make multiple changes, including
+  ;; moving point, changing text property, inserting/deleting text.
+  ;; Both text prop change and ins/del invokes
+  ;; ‘after/before-change-functions’, so if there is a text prop edit
+  ;; before the real text edit in the undo history, undo-hl will
+  ;; highlight the text prop change (often of size 1 at EOL) and
+  ;; ignore the following text change. A simple check of size
+  ;; eliminates most of such problems caused by both jit-lock and
+  ;; ws-bulter.
+  :type 'integer)
+
 (defvar-local undo-hl--overlay nil
   "The overlay used for highlighting inserted region.")
 
@@ -75,7 +92,8 @@ This is to be called from ‘after-change-functions’, see its doc
 for BEG, END and LEN."
   (when (and (memq this-command undo-hl-undo-commands)
              undo-hl--hook-can-run
-             (eq len 0))
+             (eq len 0)
+             (>= (- end beg) undo-hl-mininum-edit-size))
     ;; Prevent subsequent change hooks activated in this command loop
     ;; from running.
     (setq undo-hl--hook-can-run nil)
@@ -92,7 +110,8 @@ This is to be called from ‘before-change-functions’, see its doc
 for BEG and END."
   (when (and (memq this-command undo-hl-undo-commands)
              undo-hl--hook-can-run
-             (not (eq beg end)))
+             (not (eq beg end))
+             (>= (- end beg) undo-hl-mininum-edit-size))
     ;; Prevent subsequent change hooks activated in this command loop
     ;; from running.
     (setq undo-hl--hook-can-run nil)
