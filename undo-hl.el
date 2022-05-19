@@ -137,6 +137,7 @@ for BEG and END."
       (delete-overlay undo-hl--overlay)
       (setq undo-hl--overlay nil))))
 
+;;;###autoload
 (define-minor-mode undo-hl-mode
   "Highlight undo. Note that this is a local minor mode.
 I recommend only enabling this for text-editing modes."
