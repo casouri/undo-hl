@@ -14,7 +14,7 @@ This is different from =highlight-changes-mode= in several regards. It highlight
 
 * Usage
 
-Download the package and =M-x undo-hl-mode RET=. This is a local minor mode so you need to add to other mode’s hooks. I recommend only enabling this for text-editing modes.
+Download and install the package, then =M-x undo-hl-mode RET=. This is a local minor mode so you need to add to other mode’s hooks. I recommend only enabling this for text-editing modes.
 
 * Customization
 - Face: =undo-hl-delete=
