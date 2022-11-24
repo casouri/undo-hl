@@ -105,7 +105,7 @@ for BEG, END and LEN."
     (if undo-hl--overlay
         (move-overlay undo-hl--overlay beg end)
       (setq undo-hl--overlay (make-overlay beg end)))
-    (overlay-put undo-hl--overlay 'face 'default)
+    (overlay-put undo-hl--overlay 'face 'undo-hl-insert)
     (pulse-momentary-highlight-overlay undo-hl--overlay 'undo-hl-insert)))
 
 (defun undo-hl--before-change (beg end)
